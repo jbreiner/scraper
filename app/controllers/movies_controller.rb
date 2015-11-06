@@ -1,10 +1,11 @@
 class MoviesController < ApplicationController
   before_action :set_movie, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   respond_to :html
 
   def index
-    @movies = Movie.all
+    @movies = Movie.current_user.movies
     respond_with(@movies)
   end
 
@@ -21,7 +22,7 @@ class MoviesController < ApplicationController
   end
 
   def create
-    @movie = Movie.new(movie_params)
+    @movie = Movie.current_user.movies.new(movie_params)
     @movie.save
     respond_with(@movie)
   end
